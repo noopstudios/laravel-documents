@@ -19,10 +19,20 @@ final class Variables
         $fields = [];
 
         foreach ($variables as $key => $value) {
-            self::add($fields, (string) $key, $value);
+            self::add($fields, self::checked((string) $key), $value);
         }
 
         return $fields;
+    }
+
+    /** Brackets in a key would be read by the service as extra nesting. */
+    private static function checked(string $key): string
+    {
+        if (str_contains($key, '[') || str_contains($key, ']')) {
+            throw new InvalidArgumentException("Template variable key [{$key}] must not contain brackets.");
+        }
+
+        return $key;
     }
 
     /** @param  array<string, string>  $fields */
@@ -30,7 +40,7 @@ final class Variables
     {
         if (is_array($value) && $value !== []) {
             foreach ($value as $child => $item) {
-                self::add($fields, "{$key}[{$child}]", $item);
+                self::add($fields, "{$key}[".self::checked((string) $child).']', $item);
             }
 
             return;

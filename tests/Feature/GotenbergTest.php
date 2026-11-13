@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Sleep;
@@ -7,12 +8,6 @@ use Noop\Documents\DocumentException;
 use Noop\Documents\Facades\Pdf;
 
 const PDF = '%PDF-1.7 fake';
-
-/** @return array<string, string> */
-function fields(Request $request): array
-{
-    return collect($request->data())->whereNull('filename')->pluck('contents', 'name')->all();
-}
 
 function withGotenberg(): void
 {
@@ -106,4 +101,38 @@ it('converts office files and merges PDFs in the given order', function () {
             ['001.pdf', '%PDF-B'],
             ['002.pdf', PDF],
         ]);
+});
+
+it('does not retry a connection failure', function () {
+    withGotenberg();
+    $attempts = 0;
+    Http::fake(function () use (&$attempts) {
+        $attempts++;
+
+        throw new ConnectionException('cURL error 28: timed out');
+    });
+
+    $error = null;
+
+    try {
+        Pdf::html('<p>x</p>')->bytes();
+    } catch (DocumentException $error) {
+    }
+
+    expect($error?->status)->toBeNull()
+        ->and($error)->toBeInstanceOf(DocumentException::class)
+        ->and($attempts)->toBe(1);
+});
+
+it('sends only the A4 defaults when nothing is configured', function () {
+    withGotenberg();
+    Http::fake(['*' => Http::response(PDF)]);
+
+    Pdf::html('<p>x</p>')->bytes();
+
+    Http::assertSent(fn (Request $request) => fields($request) === [
+        'paperWidth' => '210mm',
+        'paperHeight' => '297mm',
+        'printBackground' => 'true',
+    ]);
 });

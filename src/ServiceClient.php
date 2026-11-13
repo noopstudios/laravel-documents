@@ -51,7 +51,7 @@ final readonly class ServiceClient
 
         if (! $response->successful()) {
             $message = $response->json('message');
-            $message = is_string($message) ? $message : mb_substr($response->body(), 0, 200);
+            $message = is_string($message) ? $message : mb_scrub(mb_substr($response->body(), 0, 200));
 
             throw new DocumentException("{$this->service} failed with status {$response->status()}: {$message}", $response->status());
         }

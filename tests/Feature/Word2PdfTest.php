@@ -15,6 +15,8 @@ function docxFile(string $contents = 'PK-fake'): string
 {
     $path = tempnam(sys_get_temp_dir(), 'tpl');
     file_put_contents($path, $contents);
+    // Deleted when the process ends, so tests need no cleanup of their own.
+    register_shutdown_function(fn () => @unlink($path));
 
     return $path;
 }
@@ -41,7 +43,9 @@ it('normalizes variables into bracket-notation text fields', function () {
         'points[1][title]' => 'B',
         'empty' => '',
     ])->and(fn () => Variables::normalize(['rows' => [new stdClass]]))
-        ->toThrow(InvalidArgumentException::class, 'rows[0]');
+        ->toThrow(InvalidArgumentException::class, 'rows[0]')
+        ->and(fn () => Variables::normalize(['a' => ['b]' => 'x']]))
+        ->toThrow(InvalidArgumentException::class, 'Template variable key [b]] must not contain brackets.');
 });
 
 it('fills a template into a PDF/A with the API key', function () {
@@ -53,7 +57,7 @@ it('fills a template into a PDF/A with the API key', function () {
     Http::assertSent(fn (Request $request) => $request->url() === 'https://word2pdf.test/generator_word_to_pdf_var?pdfa=PDF%2FA-2b'
         && $request->header('X-API-Key') === ['fake-key']
         && $request->hasFile('file', 'PK-fake', 'template.docx')
-        && collect($request->data())->whereNull('filename')->pluck('contents', 'name')->all() === ['signed' => '', 'client[name]' => 'Ana']);
+        && fields($request) === ['signed' => '', 'client[name]' => 'Ana']);
 });
 
 it('fills a template into a docx without PDF/A or API key', function () {
