@@ -4,6 +4,7 @@ use Illuminate\Http\Client\Request;
 use Noop\Documents\Tests\TestCase;
 
 pest()->extend(TestCase::class)->in('Feature');
+pest()->extend(TestCase::class)->group('real')->in('Real');
 
 /** @return array<string, string> */
 function fields(Request $request): array

@@ -11,4 +11,14 @@ abstract class TestCase extends Orchestra
     {
         return [DocumentsServiceProvider::class];
     }
+
+    /** Keeps a developer's shell environment out of the normal suite. */
+    protected function defineEnvironment($app): void
+    {
+        $app['config']->set([
+            'documents.gotenberg.url' => null,
+            'documents.word2pdf.url' => null,
+            'documents.word2pdf.api_key' => null,
+        ]);
+    }
 }
