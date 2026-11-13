@@ -20,6 +20,20 @@ class DocumentsServiceProvider extends ServiceProvider
                 config()->integer('documents.gotenberg.timeout'),
             ));
         });
+
+        $this->app->singleton(Word2Pdf::class, function () {
+            $url = config('documents.word2pdf.url');
+            $key = config('documents.word2pdf.api_key');
+
+            return new Word2Pdf(new ServiceClient(
+                'word2pdf',
+                'WORD2PDF_URL',
+                is_string($url) ? $url : null,
+                config()->integer('documents.word2pdf.timeout'),
+                // The service only checks the key when it has one configured.
+                is_string($key) && $key !== '' ? ['X-API-Key' => $key] : [],
+            ));
+        });
     }
 
     public function boot(): void
