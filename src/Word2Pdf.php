@@ -22,12 +22,12 @@ class Word2Pdf
     /**
      * @param  array<string, string>  $images  filename => contents; the HTML refers to them by filename
      */
-    public function fromHtml(string $html, ?string $referenceDocx = null, array $images = []): PendingTemplate
+    public function fromHtml(string $html, ?string $referencePath = null, array $images = []): PendingTemplate
     {
         $files = [['html', $html, 'body.html']];
 
-        if ($referenceDocx !== null) {
-            $files[] = ['reference', self::read($referenceDocx), 'reference.docx'];
+        if ($referencePath !== null) {
+            $files[] = ['reference', self::read($referencePath), 'reference.docx'];
         }
 
         foreach ($images as $filename => $contents) {

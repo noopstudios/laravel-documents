@@ -30,12 +30,12 @@ final class FakeWord2Pdf extends Word2Pdf
         return new PendingTemplate($this->fakeClient, '', '', []);
     }
 
-    public function fromHtml(string $html, ?string $referenceDocx = null, array $images = []): PendingTemplate
+    public function fromHtml(string $html, ?string $referencePath = null, array $images = []): PendingTemplate
     {
         $this->record([
             'type' => 'fromHtml',
             'html' => $html,
-            'reference' => $referenceDocx,
+            'reference' => $referencePath,
             'images' => array_map(basename(...), array_keys($images)),
         ]);
 

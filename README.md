@@ -50,8 +50,11 @@ $pending = Pdf::view('invoices.show', ['invoice' => $invoice])
     ->landscape()
     ->margins(30, 15, 30, 15); // topo, direita, baixo, esquerda, em mm
 
+// em alternativa (cada uma converte o PDF):
 $bytes = $pending->bytes();
 return $pending->download('fatura.pdf');
+
+$pdf = Pdf::view('invoices.show', ['invoice' => $invoice])->get(); // Document: bytes() e download()
 
 // Word ou outro ficheiro Office para PDF, e junção de PDFs
 $pdf = Pdf::office($docxBytes, 'anexo.docx');
@@ -62,10 +65,10 @@ WordTemplate::fill($path, $variables)->toPdf(PdfA::A2b);
 WordTemplate::fill($path, $variables)->toDocx();
 
 // HTML para Word (referência e imagens opcionais)
-WordTemplate::fromHtml($html, $referenceDocx, ['logo.png' => $pngBytes])->toDocx();
+WordTemplate::fromHtml($html, $referencePath, ['logo.png' => $pngBytes])->toDocx();
 ```
 
-`office()`, `merge()`, `toPdf()` e `toDocx()` devolvem um `Document` com `bytes()` e `download($filename)`.
+`office()`, `merge()`, `toPdf()` e `toDocx()` devolvem um `Document` com `bytes()` e `download($filename)`. Em `download()`, `/` e `\` no nome do ficheiro são substituídos por `-`.
 
 ## Variáveis dos modelos
 
@@ -81,7 +84,7 @@ Uma armadilha que o pacote não resolve: uma variável usada no modelo e não pa
 
 ## Erros
 
-Todas as falhas são `DocumentException`; `->status` tem o código HTTP, quando existe. Só o HTTP 503 (serviço ocupado) é repetido, até 3 tentativas. Timeouts e outros erros não são repetidos. A resposta é verificada: tem de ser mesmo um PDF ou docx.
+As falhas dos serviços (e a falta do URL) são `DocumentException`; `->status` tem o código HTTP, quando existe. Argumentos inválidos (formato de papel desconhecido, variável não suportada, ficheiro ilegível) lançam `InvalidArgumentException`, e `fromHtml()->toPdf()` lança `LogicException`. Só o HTTP 503 (serviço ocupado) é repetido, até 3 tentativas. Timeouts e outros erros não são repetidos. A resposta é verificada: tem de ser mesmo um PDF ou docx.
 
 ## Notas
 
@@ -103,7 +106,7 @@ Pdf::assertGenerated('view', fn (array $call) => $call['view'] === 'invoices.sho
 WordTemplate::assertNothingGenerated();
 ```
 
-Os fakes não fazem chamadas HTTP nem leem views ou ficheiros. Tipos registados: `view`, `html`, `office`, `merge` (`Pdf`) e `fill`, `fromHtml` (`WordTemplate`).
+Os fakes não fazem chamadas HTTP nem leem views ou ficheiros. Cada chamada registada tem as chaves: `view`: `view`, `data`; `html`: `html`; `office`: `filename`; `merge`: `count`; `fill`: `path`, `variables`; `fromHtml`: `html`, `reference`, `images`. Tipos registados: `view`, `html`, `office`, `merge` (`Pdf`) e `fill`, `fromHtml` (`WordTemplate`).
 
 ## Testes do pacote
 

@@ -10,7 +10,7 @@ use Noop\Documents\Testing\FakeGotenberg;
  * @method static \Noop\Documents\PendingPdf view(view-string $view, array<string, mixed> $data = [])
  * @method static \Noop\Documents\PendingPdf html(string $html)
  * @method static \Noop\Documents\Document office(string $contents, string $filename)
- * @method static \Noop\Documents\Document merge(list<string|\Noop\Documents\Document> $pdfs)
+ * @method static \Noop\Documents\Document merge(array<array-key, string|\Noop\Documents\Document> $pdfs)
  * @method static void assertGenerated(string $type, ?\Closure $filter = null)
  * @method static void assertNothingGenerated()
  *

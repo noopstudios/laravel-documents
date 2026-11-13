@@ -4,6 +4,7 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Sleep;
+use Noop\Documents\Document;
 use Noop\Documents\DocumentException;
 use Noop\Documents\Facades\Pdf;
 
@@ -29,6 +30,23 @@ it('retries a 503 until a PDF comes back', function () {
     Http::fakeSequence()->push('busy', 503)->push('busy', 503)->push(PDF);
 
     expect(Pdf::html('<p>x</p>')->bytes())->toBe(PDF);
+
+    Http::assertSentCount(3);
+});
+
+it('gives up after three 503 responses', function () {
+    withGotenberg();
+    Sleep::fake();
+    Http::fakeSequence()->push('busy', 503)->push('busy', 503)->push('busy', 503);
+
+    $error = null;
+
+    try {
+        Pdf::html('<p>x</p>')->bytes();
+    } catch (DocumentException $error) {
+    }
+
+    expect($error?->status)->toBe(503);
 
     Http::assertSentCount(3);
 });
@@ -91,7 +109,7 @@ it('converts office files and merges PDFs in the given order', function () {
     Http::fake(['*' => Http::response(PDF)]);
 
     Pdf::office('docx bytes', '/tmp/uploads/anexo.docx');
-    Pdf::merge(['%PDF-B', Pdf::office('a', 'a.docx')]);
+    Pdf::merge([5 => '%PDF-B', 2 => Pdf::office('a', 'a.docx')]);
 
     Http::assertSent(fn (Request $request) => $request->url() === 'https://gotenberg.test/forms/libreoffice/convert'
         && $request->hasFile('files', 'docx bytes', 'anexo.docx'));
@@ -101,6 +119,13 @@ it('converts office files and merges PDFs in the given order', function () {
             ['001.pdf', '%PDF-B'],
             ['002.pdf', PDF],
         ]);
+});
+
+it('downloads with a filename containing %, / and non-ASCII characters', function () {
+    $response = (new Document(PDF, 'application/pdf'))->download('relatório 10% FT 2026/11.pdf');
+
+    expect($response->headers->get('Content-Disposition'))->toContain('attachment')
+        ->and($response->headers->get('Content-Type'))->toBe('application/pdf');
 });
 
 it('does not retry a connection failure', function () {

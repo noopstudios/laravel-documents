@@ -17,10 +17,12 @@ final readonly class Document
 
     public function download(string $filename): Response
     {
+        $filename = str_replace(['/', '\\'], '-', $filename);
+
         return new Response($this->bytes, 200, [
             'Content-Type' => $this->mimeType,
-            // Symfony rejects non-ASCII filenames without an ASCII fallback.
-            'Content-Disposition' => HeaderUtils::makeDisposition('attachment', $filename, Str::ascii($filename)),
+            // Symfony rejects non-ASCII filenames without an ASCII fallback, and '%' in the fallback.
+            'Content-Disposition' => HeaderUtils::makeDisposition('attachment', $filename, str_replace('%', '', Str::ascii($filename))),
         ]);
     }
 }

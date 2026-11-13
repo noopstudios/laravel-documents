@@ -27,14 +27,14 @@ class Gotenberg
     }
 
     /**
-     * @param  list<string|Document>  $pdfs
+     * @param  array<array-key, string|Document>  $pdfs
      */
     public function merge(array $pdfs): Document
     {
         $files = [];
 
-        // Gotenberg merges in alphabetical filename order, so the names carry the order.
-        foreach ($pdfs as $i => $pdf) {
+        // Gotenberg merges in alphabetical filename order, so the names carry the order (by position, not array key).
+        foreach (array_values($pdfs) as $i => $pdf) {
             $files[] = ['files', $pdf instanceof Document ? $pdf->bytes() : $pdf, sprintf('%03d.pdf', $i + 1)];
         }
 

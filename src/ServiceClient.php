@@ -46,7 +46,7 @@ class ServiceClient
         try {
             $response = $request->post(rtrim($this->url, '/').$path, $fields);
         } catch (ConnectionException $e) {
-            throw new DocumentException("{$this->service} could not be reached.", previous: $e);
+            throw new DocumentException("{$this->service} request failed (connection error or timeout).", previous: $e);
         }
 
         if (! $response->successful()) {

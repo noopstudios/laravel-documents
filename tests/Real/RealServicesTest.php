@@ -105,16 +105,11 @@ it('fills a docx template with normalized variables', function () {
         ->not()->toContain('SHOWN')
         ->toContain('Nothing: []')
         ->toContain('Empty: []')
-        ->toContain('T1;T2;')
-        ->toContain('T24;T25;')
+        ->toContain('Items: '.implode('', array_map(fn (int $i) => "T{$i};", range(1, 25))))
         ->toContain('Nested: ACME')
         ->not()->toContain('undefined')
         ->not()->toContain('null')
         ->not()->toContain('false');
-
-    for ($i = 1; $i <= 25; $i++) {
-        expect($text)->toContain("T{$i};");
-    }
 })->skip(fn () => missing('word2pdf'), 'No word2pdf URL configured.');
 
 it('fills a docx template into a PDF/A', function () {

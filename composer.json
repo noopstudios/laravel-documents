@@ -5,12 +5,10 @@
     "type": "library",
     "require": {
         "php": "^8.3",
-        "illuminate/contracts": "^13.0",
-        "illuminate/http": "^13.0",
-        "illuminate/support": "^13.0",
-        "illuminate/view": "^13.0"
+        "laravel/framework": "^13.0"
     },
     "require-dev": {
+        "ext-zip": "*",
         "larastan/larastan": "^3.0",
         "laravel/pint": "^1.0",
         "orchestra/testbench": "^11.0",

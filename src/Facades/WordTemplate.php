@@ -8,7 +8,7 @@ use Noop\Documents\Word2Pdf;
 
 /**
  * @method static \Noop\Documents\PendingTemplate fill(string $path, array<array-key, mixed> $variables = [])
- * @method static \Noop\Documents\PendingTemplate fromHtml(string $html, ?string $referenceDocx = null, array<string, string> $images = [])
+ * @method static \Noop\Documents\PendingTemplate fromHtml(string $html, ?string $referencePath = null, array<string, string> $images = [])
  * @method static void assertGenerated(string $type, ?\Closure $filter = null)
  * @method static void assertNothingGenerated()
  *
