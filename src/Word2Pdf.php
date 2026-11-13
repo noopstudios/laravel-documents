@@ -4,9 +4,9 @@ namespace Noop\Documents;
 
 use InvalidArgumentException;
 
-final readonly class Word2Pdf
+class Word2Pdf
 {
-    public function __construct(private ServiceClient $client) {}
+    public function __construct(private readonly ServiceClient $client) {}
 
     /**
      * @param  array<array-key, mixed>  $variables

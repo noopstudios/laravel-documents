@@ -7,17 +7,17 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use Throwable;
 
-final readonly class ServiceClient
+class ServiceClient
 {
     /**
      * @param  array<string, string>  $headers
      */
     public function __construct(
-        private string $service,
-        private string $urlEnv,
-        private ?string $url,
-        private int $timeout,
-        private array $headers = [],
+        private readonly string $service,
+        private readonly string $urlEnv,
+        private readonly ?string $url,
+        private readonly int $timeout,
+        private readonly array $headers = [],
     ) {}
 
     /**

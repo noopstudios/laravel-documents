@@ -2,9 +2,9 @@
 
 namespace Noop\Documents;
 
-final readonly class Gotenberg
+class Gotenberg
 {
-    public function __construct(private ServiceClient $client) {}
+    public function __construct(private readonly ServiceClient $client) {}
 
     /**
      * @param  view-string  $view
