@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 (por lançar)
+## 0.1.0 (2026-11-18)
 
 - Cliente Gotenberg: `Pdf::view()`, `html()`, `office()` e `merge()`, com cabeçalho, rodapé, papel, orientação e margens.
 - Autenticação básica opcional do Gotenberg (`GOTENBERG_USERNAME` e `GOTENBERG_PASSWORD`).
