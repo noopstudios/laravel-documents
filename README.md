@@ -23,6 +23,8 @@ Cada servidor e cada CI precisa de acesso de leitura ao repositório: uma deploy
 | Variável | Descrição | Por omissão |
 | --- | --- | --- |
 | `GOTENBERG_URL` | Obrigatória para PDFs | nenhum |
+| `GOTENBERG_USERNAME` | Opcional; autenticação básica do Gotenberg | nenhum |
+| `GOTENBERG_PASSWORD` | Opcional; palavra-passe da autenticação básica do Gotenberg | nenhum |
 | `GOTENBERG_TIMEOUT` | Segundos | 120 |
 | `WORD2PDF_URL` | Obrigatória para modelos Word | nenhum |
 | `WORD2PDF_API_KEY` | Opcional; enviada no cabeçalho `X-API-Key` | nenhum |

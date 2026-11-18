@@ -3,6 +3,8 @@
 return [
     'gotenberg' => [
         'url' => env('GOTENBERG_URL'),
+        'username' => env('GOTENBERG_USERNAME'),
+        'password' => env('GOTENBERG_PASSWORD'),
         'timeout' => (int) env('GOTENBERG_TIMEOUT', 120),
     ],
 

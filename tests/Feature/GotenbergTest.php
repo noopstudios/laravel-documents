@@ -161,3 +161,22 @@ it('sends only the A4 defaults when nothing is configured', function () {
         'printBackground' => 'true',
     ]);
 });
+
+it('authenticates with HTTP Basic when a username is configured', function () {
+    withGotenberg();
+    config(['documents.gotenberg.username' => 'user', 'documents.gotenberg.password' => 'secret']);
+    Http::fake(['*' => Http::response(PDF)]);
+
+    Pdf::html('<p>x</p>')->bytes();
+
+    Http::assertSent(fn (Request $request) => $request->header('Authorization') === ['Basic '.base64_encode('user:secret')]);
+});
+
+it('sends no Authorization header without a username', function () {
+    withGotenberg();
+    Http::fake(['*' => Http::response(PDF)]);
+
+    Pdf::html('<p>x</p>')->bytes();
+
+    Http::assertSent(fn (Request $request) => ! $request->hasHeader('Authorization'));
+});

@@ -12,12 +12,18 @@ class DocumentsServiceProvider extends ServiceProvider
 
         $this->app->singleton(Gotenberg::class, function () {
             $url = config('documents.gotenberg.url');
+            $username = config('documents.gotenberg.username');
+            $password = config('documents.gotenberg.password');
 
             return new Gotenberg(new ServiceClient(
                 'Gotenberg',
                 'GOTENBERG_URL',
                 is_string($url) ? $url : null,
                 config()->integer('documents.gotenberg.timeout'),
+                // Gotenberg only asks for credentials when started with basic auth enabled.
+                is_string($username) && $username !== ''
+                    ? ['Authorization' => 'Basic '.base64_encode($username.':'.(is_string($password) ? $password : ''))]
+                    : [],
             ));
         });
 
