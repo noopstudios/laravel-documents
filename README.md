@@ -4,19 +4,9 @@ Cliente Laravel para o Gotenberg (PDFs) e para o word2pdf (modelos Word). Sem ta
 
 ## Instalação
 
-O repositório é privado e não está no Packagist. No `composer.json` da aplicação:
-
-```json
-"repositories": [
-    { "type": "vcs", "url": "git@github.com:noopstudios/laravel-documents.git" }
-]
-```
-
 ```bash
 composer require noopstudios/laravel-documents
 ```
-
-Cada servidor e cada CI precisa de acesso de leitura ao repositório: uma deploy key SSH, ou um token GitHub só de leitura no `auth.json` do Composer (`composer config --global --auth github-oauth.github.com <token>`). Nunca o versionar.
 
 ## Configuração
 

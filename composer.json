@@ -1,7 +1,7 @@
 {
     "name": "noopstudios/laravel-documents",
     "description": "PDF generation (Gotenberg) and Word templates (word2pdf) for Laravel.",
-    "license": "proprietary",
+    "license": "MIT",
     "type": "library",
     "require": {
         "php": "^8.3",
