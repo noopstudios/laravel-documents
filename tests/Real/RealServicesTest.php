@@ -73,12 +73,17 @@ it('renders HTML with header, footer and margins through Gotenberg', function ()
     expect($pdf)->toStartWith('%PDF');
 })->skip(fn () => missing('gotenberg'), 'No gotenberg URL configured.');
 
-it('merges PDFs and converts a docx through Gotenberg', function () {
-    $merged = Pdf::merge([Pdf::html('<p>One</p>')->get(), Pdf::html('<p>Two</p>')->get()]);
+it('merges PDFs through Gotenberg', function () {
+    $merged = Pdf::merge([Pdf::html('<p>PageOne</p>')->get(), Pdf::html('<p>PageTwo</p>')->get()])->bytes();
+
+    expect($merged)->toStartWith('%PDF')
+        ->and(preg_match_all('/\/Type\s*\/Page[^s]/', $merged))->toBe(2);
+})->skip(fn () => missing('gotenberg'), 'No gotenberg URL configured.');
+
+it('converts a docx through Gotenberg', function () {
     $converted = Pdf::office(File::get(sampleTemplate()), 'anexo.docx');
 
-    expect($merged->bytes())->toStartWith('%PDF')
-        ->and($converted->bytes())->toStartWith('%PDF');
+    expect($converted->bytes())->toStartWith('%PDF');
 })->skip(fn () => missing('gotenberg'), 'No gotenberg URL configured.');
 
 it('fills a docx template with normalized variables', function () {
@@ -118,7 +123,8 @@ it('fills a docx template into a PDF/A', function () {
         'items' => [['title' => 'T1']], 'company' => ['name' => 'ACME'],
     ])->toPdf(PdfA::A2b);
 
-    expect($pdf->bytes())->toStartWith('%PDF');
+    expect($pdf->bytes())->toStartWith('%PDF')
+        ->and($pdf->bytes())->toContain('pdfaid:part');
 })->skip(fn () => missing('word2pdf'), 'No word2pdf URL configured.');
 
 it('converts HTML into a docx', function () {

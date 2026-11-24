@@ -38,6 +38,6 @@ class Gotenberg
             $files[] = ['files', $pdf instanceof Document ? $pdf->bytes() : $pdf, sprintf('%03d.pdf', $i + 1)];
         }
 
-        return $this->client->post('/forms/pdfengines/merge', $files, [], Format::Pdf);
+        return $this->client->post('/forms/pdf/merge', $files, [], Format::Pdf);
     }
 }

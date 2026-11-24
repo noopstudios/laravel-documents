@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.0 (2026-11-24)
+
+- Requer Gotenberg 9: `Pdf::merge()` usa `/forms/pdf/merge`. Com o Gotenberg 8, `Pdf::merge()` falha com 404.
+- Atualize o Gotenberg antes de atualizar o pacote.
+
 ## 0.1.0 (2026-11-18)
 
 - Cliente Gotenberg: `Pdf::view()`, `html()`, `office()` e `merge()`, com cabeçalho, rodapé, papel, orientação e margens.
