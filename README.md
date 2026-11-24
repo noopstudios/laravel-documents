@@ -1,6 +1,6 @@
 # laravel-documents
 
-Cliente Laravel para o Gotenberg (PDFs) e para o word2pdf (modelos Word). Sem tabelas, jobs nem Filament. Requer PHP ^8.3 e Laravel 13.
+Cliente Laravel para o Gotenberg (PDFs) e para o word2pdf (modelos Word). Sem tabelas, jobs nem Filament. Requer PHP ^8.3, Laravel 13 e Gotenberg 9 (recomendado ≥ 9.4).
 
 ## Instalação
 
@@ -93,6 +93,8 @@ As falhas dos serviços (e a falta do URL) são `DocumentException`; `->status` 
 - O Chromium corta o conteúdo do cabeçalho e rodapé que não cabe na margem; aumente `margins()`.
 - O cabeçalho e o rodapé têm de ser documentos HTML completos.
 - `Pdf::merge()` mantém a ordem recebida.
+- `WordTemplate::...->toPdf(PdfA::...)` exige que o word2pdf use o Gotenberg 9; caso contrário o PDF volta sem PDF/A e sem erro.
+- Um docx sem tamanho de página sai em Letter (`Pdf::office()`); os modelos criados no Word trazem o tamanho.
 - Em `fromHtml()`, o HTML tem de ser UTF-8 e as imagens são referenciadas pelo nome do ficheiro (máximo 20).
 - `fromHtml()` não tem `toPdf()`; use `Pdf::html()` para um PDF.
 

@@ -114,7 +114,7 @@ it('converts office files and merges PDFs in the given order', function () {
     Http::assertSent(fn (Request $request) => $request->url() === 'https://gotenberg.test/forms/libreoffice/convert'
         && $request->hasFile('files', 'docx bytes', 'anexo.docx'));
 
-    Http::assertSent(fn (Request $request) => $request->url() === 'https://gotenberg.test/forms/pdfengines/merge'
+    Http::assertSent(fn (Request $request) => $request->url() === 'https://gotenberg.test/forms/pdf/merge'
         && collect($request->data())->map(fn ($part) => [$part['filename'], $part['contents']])->all() === [
             ['001.pdf', '%PDF-B'],
             ['002.pdf', PDF],
