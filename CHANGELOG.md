@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1 (2026-11-24)
+
+- Licença MIT e instalação pelo Packagist (`composer require`), sem repositório `vcs` nem credenciais do GitHub.
+
 ## 0.2.0 (2026-11-24)
 
 - Requer Gotenberg 9: `Pdf::merge()` usa `/forms/pdf/merge`. Com o Gotenberg 8, `Pdf::merge()` falha com 404.
