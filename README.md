@@ -1,6 +1,6 @@
 # laravel-documents
 
-Cliente Laravel para o Gotenberg (PDFs) e para o word2pdf (modelos Word). Sem tabelas, jobs nem Filament. Requer PHP ^8.3, Laravel 13 e Gotenberg 9 (recomendado ≥ 9.4).
+Cliente Laravel para o Gotenberg (PDFs) e para o word2pdf (modelos Word). Sem tabelas, jobs nem Filament. Requer PHP ^8.3, Laravel 13 e Gotenberg 9 (recomendado ≥ 9.4: folhas de cálculo e texto saem em A4 em vez de Letter).
 
 ## Instalação
 
